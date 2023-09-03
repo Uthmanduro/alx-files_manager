@@ -4,6 +4,7 @@ import { promisify } from 'util';
 class RedisClient {
   constructor() {
     this.client = createClient();
+    this.isConnect = true;
     this.client.on('error', (error) => {
       console.log(error);
     });
