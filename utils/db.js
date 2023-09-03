@@ -1,15 +1,21 @@
 const { MongoClient } = require('mongodb');
-// const { promisify } = require('util');
 
 class DBClient {
-  constructor(host = 'localhost', port = 27017, database = 'files_manager') {
+  host = process.env.DB_HOST || 'localhost';
+  port = process.env.DB_PORT || 27017;
+  database = process.env.DB_DATABASE || 'files_manager';
+
+  constructor(host, port, database) {
     const url = `mongodb://${host}:${port}`;
     this.client = new MongoClient(url);
-    this.isconnected = this.run(database);
+    this.isconnected = false;
+    this.db = null;
+    this.run(database);
   }
 
   async run(database) {
     await this.client.connect();
+    this.isconnected = true;
     this.db = this.client.db(database);
   }
 
