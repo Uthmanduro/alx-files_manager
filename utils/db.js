@@ -1,11 +1,10 @@
 const { MongoClient } = require('mongodb');
 
 class DBClient {
-  host = process.env.DB_HOST || 'localhost';
-  port = process.env.DB_PORT || 27017;
-  database = process.env.DB_DATABASE || 'files_manager';
-
-  constructor(host, port, database) {
+  constructor() {
+    const host = process.env.DB_HOST || 'localhost';
+    const port = process.env.DB_PORT || 27017;
+    const database = process.env.DB_DATABASE || 'files_manager';
     const url = `mongodb://${host}:${port}`;
     this.client = new MongoClient(url);
     this.isconnected = false;
