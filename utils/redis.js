@@ -3,7 +3,10 @@ const { promisify } = require('util');
 
 class RedisClient {
   constructor() {
-    this.client = createClient();
+    this.client = createClient({
+      host: '127.0.0.1',
+      port: 6379,
+    });
     this.isConnect = true;
     this.client.on('error', (error) => {
       console.log(error);
