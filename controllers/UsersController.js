@@ -1,7 +1,7 @@
 const sha1 = require('sha1');
+const { ObjectId } = require('mongodb');
 const dbClient = require('../utils/db');
 const redisClient = require('../utils/redis');
-const { ObjectId } = require('mongodb');
 
 function hashPassword(password) {
   return sha1(password);
@@ -40,16 +40,16 @@ exports.postNew = async (req, res) => {
 
 exports.getMe = async (req, res) => {
   const token = req.headers['x-token'];
-  const authToken = 'auth_' + token;
+  const authToken = `auth_${token}`;
   const userId = await redisClient.get(authToken);
   if (!userId) {
-    return res.status(401).json({'error': 'Unauthorized'});
+    return res.status(401).json({ error: 'Unauthorized' });
   }
   const userObjectId = new ObjectId(userId);
   const user = await dbClient.db.collection('users').findOne({ _id: userObjectId });
   if (!user) {
     res.send(userId);
-    return res.status(401).json({'error': 'Unauthorized'});
+    return res.status(401).json({ error: 'Unauthorized' });
   }
-  return res.json({'id': userId, 'email': user.email});
-}
+  return res.json({ id: userId, email: user.email });
+};
